@@ -187,7 +187,6 @@ int main(int argc, char* argv[]) {
 
     auto start = std::chrono::high_resolution_clock::now(); //measure time for DBSCAN algorithm
 
-    std::vector<Point> batch; //vector for batch processing
     // Read data, line by line
     int shotOffset; //Variable to store the shot offset from the input file
     bool firstShot = true; //Variable to store the shot offset from the input file
