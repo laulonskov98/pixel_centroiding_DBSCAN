@@ -12,7 +12,7 @@ def compile_dbscan():
 
     # Compile the C++ program using the C++ compiler (g++ in this example)
     try:
-        compile_command = ["g++", cpp_file, "-o", output_file, "-O3"]
+        compile_command = ["g++", cpp_file, "-o", output_file, "-O2"]
         subprocess.run(compile_command, check=True)
         print("Compilation successful.")
     except subprocess.CalledProcessError as e:
@@ -25,9 +25,9 @@ def run_centroiding(input_path: str, output_path: str, correctiondata_path:str =
     Description of run_centroiding.
 
     Args:
-        arg1 (str):   "path/to/input.csv"
-        arg2 (str):   "path/to/output.csv"
-        arg3 (str):   "path/to/correctiondata.csv"
+        input_path              (str):   "path/to/input.csv"
+        output_path             (str):   "path/to/output.csv"
+        arcorrectiondata_pathg3 (str):   "path/to/correctiondata.csv"
 
     Returns:
         None
