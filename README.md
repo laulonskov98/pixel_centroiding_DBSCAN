@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is a C++ script designed to perform centroiding using the DBSCAN algorithm for clustering given input from a Astrella HE. It offers way faster performance compared to Scikit-learn's DBSCAN  method. The script can be called from Python using a function called `run_centroiding`.
+This is a C++ script designed to perform centroiding using the DBSCAN algorithm for clustering given input from a timepix detector. It offers way faster performance compared to Scikit-learn's DBSCAN  method. The script can be called from Python using a function called `run_centroiding`.
 
 Compilation of the C++ script is done automatically.
 
@@ -35,9 +35,15 @@ inputfile (str): Path to the input data CSV file.
 outputfile (str): Path to the output centroid CSV file.
 correctiondata (str, optional): Path to the correction data CSV file (optional)
 
+# Input File Format
+The input data CSV file should have 6 columns with the following headers:
 
+(Index, shot, x, y, tof, tot)
+
+The output centroid CSV file will have the same columns and format as the input file.
+ 
 # Acknowledgments
-This project was developed by Laurits Lønskov Sørensen and Simon Fischer Nielsen and is not affiliated with or endorsed by Coherent Inc. (the manufacturer of the Astrella HE) 
+This project was developed by Laurits Lønskov Sørensen and Simon Fischer Nielsen and is not affiliated with or endorsed by the owner of Timepix 
 
 Please feel free to report any issues or contribute to this project on GitHub.
 
