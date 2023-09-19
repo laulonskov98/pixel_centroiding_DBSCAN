@@ -20,17 +20,29 @@ def compile_dbscan():
 
 
 
-def run_centroiding(arg1, arg2, arg3=None):
+def run_centroiding(input_path: str, output_path: str, correctiondata_path:str = None):
+    """
+    Description of run_centroiding.
+
+    Args:
+        arg1 (str):   "path/to/input.csv"
+        arg2 (str):   "path/to/output.csv"
+        arg3 (str):   "path/to/correctiondata.csv"
+
+    Returns:
+        None
+    """
+
     file_path = EXECUTABLE_PATH
 
     if not os.path.exists(file_path):
         compile_dbscan()
 
     # Run the C++ program with arguments
-    if arg3 is not None:
-        process = subprocess.Popen([EXECUTABLE_PATH, arg1, arg2, arg3], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+    if correctiondata_path is not None:
+        process = subprocess.Popen([EXECUTABLE_PATH, input_path, output_path, correctiondata_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
     else:
-        process = subprocess.Popen([EXECUTABLE_PATH, arg1, arg2], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+        process = subprocess.Popen([EXECUTABLE_PATH, input_path, output_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
 
     # Read the output and error (if any)
     output, error = process.communicate()

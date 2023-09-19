@@ -42,7 +42,7 @@ The input data CSV file should have 6 columns with the following headers:
 
 The output centroid CSV file will have the same columns and format as the input file.
  
-# Acknowledgments
+# Disclaimer
 This project was developed by Laurits Lønskov Sørensen and Simon Fischer Nielsen and is not affiliated with or endorsed by the owner of Timepix 
 
 Please feel free to report any issues or contribute to this project on GitHub.
