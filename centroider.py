@@ -12,7 +12,7 @@ def compile_dbscan():
 
     # Compile the C++ program using the C++ compiler (g++ in this example)
     try:
-        compile_command = ["g++", cpp_file, "-o", output_file, "-O3"]
+        compile_command = ["g++", cpp_file, "-o", output_file, "-O2"]
         subprocess.run(compile_command, check=True)
         print("Compilation successful.")
     except subprocess.CalledProcessError as e:
