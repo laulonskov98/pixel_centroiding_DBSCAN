@@ -7,10 +7,8 @@
 #include <chrono> //for measuring time
 #include <iomanip> //for setprecision
 
-
 //struct for a point
 struct Point {
-    int idx;
     double shot; //shot id
     double x;
     double y;
@@ -145,6 +143,8 @@ int main(int argc, char* argv[]) {
     const double TOFTTOZ = EPSILON / TOFTTRANSFORM; //tof to z coordinate transformation factor
 
     const double DOUBLEPRECISSION = 17; //number of digits for double precission
+    const double EXPECTEDNUMBERPOINTS = 1e6; //expected number of datapoints in input file
+
 
     // Open the input file
     std::ifstream file(inputFileName);
@@ -181,12 +181,13 @@ int main(int argc, char* argv[]) {
     }
     
     std::vector<Point> points;
+    points.reserve(EXPECTEDNUMBERPOINTS);
     std::string line;
     std::getline(file, line); // Read and discard the header line
 
     auto start = std::chrono::high_resolution_clock::now(); //measure time for DBSCAN algorithm
 
-
+    std::vector<Point> batch; //vector for batch processing
     // Read data, line by line
     int shotOffset; //Variable to store the shot offset from the input file
     bool firstShot = true; //Variable to store the shot offset from the input file
@@ -195,8 +196,9 @@ int main(int argc, char* argv[]) {
         std::istringstream iss(line);
         Point point;
         char delim; // Variable to store the delimiter (,) character
+        int idx; // unused index value 
         // Read the point id, shot, x, y, z and labels
-        if (iss >> point.idx >> delim >> point.shot >> delim >> point.x >> delim 
+        if (iss >> idx >> delim >> point.shot >> delim >> point.x >> delim 
                 >> point.y >> delim >> point.tof >> delim >> point.tot) {
             //Create new shot ids starting from 1 (instead of the numbers from the input file)
             if (point.tof > TOFTHRESHOLD) {continue;} //skip points with tof above threshold
