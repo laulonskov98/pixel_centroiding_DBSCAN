@@ -25,9 +25,9 @@ def run_centroiding(input_path: str, output_path: str, correctiondata_path:str =
     Description of run_centroiding.
 
     Args:
-        arg1 (str):   "path/to/input.csv"
-        arg2 (str):   "path/to/output.csv"
-        arg3 (str):   "path/to/correctiondata.csv"
+        input_path              (str):   "path/to/input.csv"
+        output_path             (str):   "path/to/output.csv"
+        arcorrectiondata_pathg3 (str):   "path/to/correctiondata.csv"
 
     Returns:
         None
