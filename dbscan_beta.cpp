@@ -7,6 +7,9 @@
 #include <chrono> //for measuring time
 #include <iomanip> //for setprecision
 
+#include <cstdio>
+
+
 //struct for a point
 struct Point {
     double shot; //shot id
@@ -142,16 +145,8 @@ int main(int argc, char* argv[]) {
     const double TOFTTRANSFORM = 81920*(25./4096)*1E-9; //weird chemistry science stuff magic number maybe??
     const double TOFTTOZ = EPSILON / TOFTTRANSFORM; //tof to z coordinate transformation factor
 
-    const double DOUBLEPRECISSION = 17; //number of digits for double precission
-    const double EXPECTEDNUMBERPOINTS = 1e6; //expected number of datapoints in input file
-
-
-    // Open the input file
-    std::ifstream file(inputFileName);
-    if (!file.is_open()) {
-        std::cerr << "Error: Could not open the file: " << inputFileName << std::endl;
-        return 1;
-    }
+    const int DOUBLEPRECISSION = 17; //number of digits for double precission
+    const int EXPECTEDNUMBERPOINTS = 5e5; //expected number of datapoints in input file
 
     
     //linear interpolation of correction file (if provided)
@@ -179,26 +174,37 @@ int main(int argc, char* argv[]) {
             }
         }
     }
+
+
+    // Open the input file C style
+    FILE* file = fopen(inputFileName, "r");
+    if (!file) {
+        std::cerr << "Error: Could not open the file: " << inputFileName << std::endl;
+        return 1;
+    }
     
+    // Create a vector to accumulate the points and reserve space to avoid reallocation
     std::vector<Point> points;
     points.reserve(EXPECTEDNUMBERPOINTS);
-    std::string line;
-    std::getline(file, line); // Read and discard the header line
 
-    auto start = std::chrono::high_resolution_clock::now(); //measure time for DBSCAN algorithm
+    // Read the header line C style
+    char header[256]; 
+    if (fgets(header, sizeof(header), file) == NULL) {
+        std::cerr << "Error: Failed to read the header" << std::endl;
+        fclose(file);
+        return 1;
+    }
 
-    // Read data, line by line
+    std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now(); //measure time for reading input file
+
     int shotOffset; //Variable to store the shot offset from the input file
     bool firstShot = true; //Variable to store the shot offset from the input file
-    int trueShot = -1; //Variable to store the shot id from the input file
-    while (std::getline(file, line)) {
-        std::istringstream iss(line);
+
+    // Read data using fscanf
+    while (!feof(file)) {
         Point point;
-        char delim; // Variable to store the delimiter (,) character
-        int idx; // unused index value 
-        // Read the point id, shot, x, y, z and labels
-        if (iss >> idx >> delim >> point.shot >> delim >> point.x >> delim 
-                >> point.y >> delim >> point.tof >> delim >> point.tot) {
+        //read input file assuming format: shot,x,y,tof,tot and no header (C style)
+        if (fscanf(file, "%*d,%lf,%lf,%lf,%lf,%lf", &point.shot, &point.x, &point.y, &point.tof, &point.tot) == 5) {
             //Create new shot ids starting from 1 (instead of the numbers from the input file)
             if (point.tof > TOFTHRESHOLD) {continue;} //skip points with tof above threshold
             else {point.z = point.tof*TOFTTOZ;} //transform tof to z coordinate
@@ -223,9 +229,11 @@ int main(int argc, char* argv[]) {
             points.push_back(point);
 
         } else {
-            std::cerr << "Error: Invalid data format in line225: " << line << std::endl;
+            std::cerr << "Error: Invalid data format in line: " << "kek" << std::endl;
         }
     }
+
+
 
     auto finish = std::chrono::high_resolution_clock::now(); //measure time for reading input file
     std::chrono::duration<double> elapsed = finish - start; //measure time for reading input file
