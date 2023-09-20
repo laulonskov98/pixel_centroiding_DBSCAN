@@ -6,7 +6,6 @@
 #include <cmath> 
 #include <chrono> //for measuring time
 #include <iomanip> //for setprecision
-
 #include <cstdio>
 
 
@@ -229,7 +228,7 @@ int main(int argc, char* argv[]) {
             points.push_back(point);
 
         } else {
-            std::cerr << "Error: Invalid data format in line: " << "kek" << std::endl;
+            std::cerr << "Error: Invalid data format in line." << std::endl;
         }
     }
 
